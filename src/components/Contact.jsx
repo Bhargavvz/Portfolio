@@ -159,19 +159,24 @@ const Contact = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Accept': 'application/json'
         },
+        mode: 'cors',
+        credentials: 'include',
         body: JSON.stringify(formData),
       });
 
       if (!response.ok) {
-        throw new Error('Failed to send message');
+        const errorData = await response.json().catch(() => null);
+        throw new Error(errorData?.message || 'Failed to send message');
       }
 
       setStatus('success');
       setFormData({ name: '', email: '', message: '' });
     } catch (err) {
+      console.error('Contact form error:', err);
       setStatus('error');
-      setError(err.message);
+      setError(err.message || 'Failed to send message. Please try again later.');
     }
   };
 

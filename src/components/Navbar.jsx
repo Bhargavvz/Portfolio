@@ -109,9 +109,11 @@ const Navbar = () => {
   }, []);
 
   const navItems = [
-    { name: 'About', href: '#about' },
-    { name: 'Projects', href: '#projects' },
-    { name: 'Contact', href: '#contact' }
+    { name: 'Home', path: 'welcome' },
+    { name: 'About', path: 'about' },
+    { name: 'Projects', path: 'projects' },
+    { name: 'Achievements', path: 'achievements' },
+    { name: 'Contact', path: 'contact' },
   ];
 
   return (
@@ -128,7 +130,7 @@ const Navbar = () => {
           {navItems.map((item, index) => (
             <NavLink
               key={item.name}
-              href={item.href}
+              href={item.path}
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 }}
@@ -168,7 +170,7 @@ const Navbar = () => {
         {navItems.map(item => (
           <MobileNavLink
             key={item.name}
-            href={item.href}
+            href={item.path}
             onClick={() => setMobileMenuOpen(false)}
           >
             {item.name}
