@@ -155,7 +155,7 @@ const Contact = () => {
     setError('');
 
     try {
-      const response = await fetch('/api/messages', {
+      const response = await fetch('https://portfolio-backend-6fmk.onrender.com/api/messages', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
