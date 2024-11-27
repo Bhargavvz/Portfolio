@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import Logo from './Logo';
 
 const Nav = styled(motion.nav)`
@@ -80,33 +80,98 @@ const MobileMenu = styled(motion.div)`
   top: 80px;
   left: 0;
   right: 0;
-  background: var(--background-light);
-  backdrop-filter: blur(10px);
+  background: var(--background);
+  border-bottom: 1px solid var(--text);
   padding: 20px;
+  z-index: 99;
   
   @media (max-width: 768px) {
     display: ${props => props.isOpen ? 'block' : 'none'};
   }
 `;
 
-const MobileNavLink = styled(NavLink)`
+const MobileNavLink = styled(motion.a)`
   display: block;
   padding: 15px 0;
   font-size: 1.2rem;
+  color: var(--white);
+  text-decoration: none;
+  text-align: center;
+  transition: color 0.3s ease;
+
+  &:hover {
+    color: var(--secondary);
+  }
+`;
+
+const ScrollToTopButton = styled(motion.button)`
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  background: var(--background);
+  color: var(--secondary);
+  border: 2px solid var(--secondary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  z-index: 99;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: var(--secondary);
+    color: var(--background);
+    transform: translateY(-2px);
+  }
+
+  svg {
+    width: 20px;
+    height: 20px;
+    stroke-width: 2.5;
+  }
 `;
 
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [showScrollTop, setShowScrollTop] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 50);
+      setShowScrollTop(window.scrollY > 200);
     };
 
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  };
+
+  const handleNavClick = (e, path) => {
+    e.preventDefault();
+    const element = document.getElementById(path);
+    if (element) {
+      const navbarHeight = 80;
+      const elementPosition = element.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset - navbarHeight;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth'
+      });
+      setMobileMenuOpen(false);
+    }
+  };
 
   const navItems = [
     { name: 'Home', path: 'welcome' },
@@ -130,7 +195,8 @@ const Navbar = () => {
           {navItems.map((item, index) => (
             <NavLink
               key={item.name}
-              href={item.path}
+              href={`#${item.path}`}
+              onClick={(e) => handleNavClick(e, item.path)}
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 }}
@@ -145,6 +211,7 @@ const Navbar = () => {
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
+          aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
         >
           {mobileMenuOpen ? (
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor">
@@ -161,22 +228,48 @@ const Navbar = () => {
         </MobileMenuButton>
       </Nav>
 
-      <MobileMenu
-        isOpen={mobileMenuOpen}
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: -20 }}
-      >
-        {navItems.map(item => (
-          <MobileNavLink
-            key={item.name}
-            href={item.path}
-            onClick={() => setMobileMenuOpen(false)}
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <MobileMenu
+            isOpen={mobileMenuOpen}
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.2 }}
           >
-            {item.name}
-          </MobileNavLink>
-        ))}
-      </MobileMenu>
+            {navItems.map((item, index) => (
+              <MobileNavLink
+                key={item.name}
+                href={`#${item.path}`}
+                onClick={(e) => handleNavClick(e, item.path)}
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.1 }}
+                whileHover={{ x: 10 }}
+              >
+                {item.name}
+              </MobileNavLink>
+            ))}
+          </MobileMenu>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {showScrollTop && (
+          <ScrollToTopButton
+            onClick={scrollToTop}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 20 }}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path d="M18 15l-6-6-6 6"/>
+            </svg>
+          </ScrollToTopButton>
+        )}
+      </AnimatePresence>
     </>
   );
 };

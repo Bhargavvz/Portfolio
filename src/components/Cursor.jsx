@@ -3,6 +3,9 @@ import styled from 'styled-components';
 import { motion } from 'framer-motion';
 
 const CursorDot = styled(motion.div)`
+  @media (max-width: 768px) {
+    display: none;
+  }
   width: 8px;
   height: 8px;
   background-color: var(--secondary);
@@ -14,6 +17,9 @@ const CursorDot = styled(motion.div)`
 `;
 
 const CursorRing = styled(motion.div)`
+  @media (max-width: 768px) {
+    display: none;
+  }
   width: 40px;
   height: 40px;
   border: 2px solid var(--secondary);
@@ -27,34 +33,52 @@ const CursorRing = styled(motion.div)`
 const Cursor = () => {
   const [mousePosition, setMousePosition] = useState({ x: -100, y: -100 });
   const [isHovered, setIsHovered] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    const updateMousePosition = (e) => {
-      setMousePosition({ x: e.clientX, y: e.clientY });
+    // Check if device is mobile
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
     };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
 
-    window.addEventListener('mousemove', updateMousePosition);
-    
-    const interactiveElements = document.querySelectorAll(
-      'a, button, [role="button"], input, select, textarea, .interactive'
-    );
-    
-    const handleMouseEnter = () => setIsHovered(true);
-    const handleMouseLeave = () => setIsHovered(false);
-    
-    interactiveElements.forEach(el => {
-      el.addEventListener('mouseenter', handleMouseEnter);
-      el.addEventListener('mouseleave', handleMouseLeave);
-    });
+    // Only add mouse tracking on desktop
+    if (!isMobile) {
+      const updateMousePosition = (e) => {
+        setMousePosition({ x: e.clientX, y: e.clientY });
+      };
+
+      window.addEventListener('mousemove', updateMousePosition);
+      
+      const interactiveElements = document.querySelectorAll(
+        'a, button, [role="button"], input, select, textarea, .interactive'
+      );
+      
+      const handleMouseEnter = () => setIsHovered(true);
+      const handleMouseLeave = () => setIsHovered(false);
+      
+      interactiveElements.forEach(el => {
+        el.addEventListener('mouseenter', handleMouseEnter);
+        el.addEventListener('mouseleave', handleMouseLeave);
+      });
+
+      return () => {
+        window.removeEventListener('mousemove', updateMousePosition);
+        interactiveElements.forEach(el => {
+          el.removeEventListener('mouseenter', handleMouseEnter);
+          el.removeEventListener('mouseleave', handleMouseLeave);
+        });
+      };
+    }
 
     return () => {
-      window.removeEventListener('mousemove', updateMousePosition);
-      interactiveElements.forEach(el => {
-        el.removeEventListener('mouseenter', handleMouseEnter);
-        el.removeEventListener('mouseleave', handleMouseLeave);
-      });
+      window.removeEventListener('resize', checkMobile);
     };
-  }, []);
+  }, [isMobile]);
+
+  if (isMobile) return null;
 
   return (
     <>

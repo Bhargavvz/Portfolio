@@ -5,7 +5,12 @@ const GlobalStyles = createGlobalStyle`
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    cursor: none;
+    @media (min-width: 768px) {
+      cursor: none;
+    }
+    @media (max-width: 767px) {
+      cursor: auto;
+    }
   }
 
   :root {

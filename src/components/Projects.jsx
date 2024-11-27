@@ -192,7 +192,7 @@ const Projects = () => {
         description: "A community issue reporting website that enables users to report local issues like drainage leaks or street light failures. Features include interactive maps with color-coded markers and an AI chatbot for user assistance.",
         tech: ["Vite React", "Spring Boot", "PostgreSQL", "Docker"],
         githubLink: "https://github.com/Bhargavvz/Communitfx",
-        liveLink: "#",
+        liveLink: "communitifx.me",
         image: "/images/communitifx.jpg"
       },
       {
@@ -215,16 +215,16 @@ const Projects = () => {
         title: "Portfolio Website",
         description: "A modern personal portfolio website showcasing my projects and skills. Built with React and features smooth animations, glass morphism effects, and responsive design.",
         tech: ["React", "Styled Components", "Framer Motion"],
-        githubLink: "https://github.com/Bhargav-j/portfolio",
-        liveLink: "https://bhargav-j.github.io/portfolio/",
+        githubLink: "https://github.com/Bhargavvz/portfolio",
+        liveLink: "https://portfolio-rho-five-45.vercel.app/",
         image: "/images/portfolio.jpg"
       },
       {
         title: "Weather App",
         description: "An interactive weather application providing real-time weather information and forecasts. Integrates with OpenWeatherMap API for accurate weather data.",
         tech: ["React", "OpenWeatherMap API", "CSS3"],
-        githubLink: "https://github.com/Bhargav-j/weatherapp",
-        liveLink: "https://bhargav-j.github.io/weatherapp/",
+        githubLink: "https://github.com/Bhargavvz/weatherapp",
+        liveLink: "#",
         image: "/images/weather.jpg"
       }
     ]);
