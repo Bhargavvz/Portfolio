@@ -142,10 +142,10 @@ portfolio/
 
 ## 👨‍💻 Developer
 
-**Adepu Vaatsava Sri Bhargav**
+**Adepu Goutham Sri Bhargav**
 - Portfolio: [Your Portfolio URL]
-- GitHub: [@Bhargavvz](https://github.com/Bhargavvz)
-- LinkedIn: [Your LinkedIn Profile]
+- GitHub: [@GouthamAdepu](https://github.com/GouthamAdepu)
+- LinkedIn: [@GouthamAdepu](https://www.linkedin.com/in/goutham-adepu-6824382aa/)
 
 ## 📄 License
 
